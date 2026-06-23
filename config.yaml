@@ -1,17 +1,44 @@
-# Pinterest Aesthetic Automation — Configuration
-# ==============================================
-# All sections have defaults. An empty/missing file works but some
-# features (publishing, generation) need tokens and provider config.
+# Pinterest Aesthetic Automation — Production Configuration
+# =========================================================
+# This file is loaded at startup. All environment variables (tokens,
+# secrets) are read from .env or the system environment — never hardcoded here.
+#
+# Usage:
+#   pinterest-agent validate-config       # check for errors
+#   pinterest-agent show-config           # view loaded config
+#   pinterest-agent doctor                # full system diagnostics
+#
+# Changes require a restart. V1 does NOT support hot-reload.
 
+# ──────────────────────────────────────────────────────────────────
 # Pinterest Application Credentials
+# ──────────────────────────────────────────────────────────────────
+# These identify your app to the Pinterest API.
+# client_id and client_secret come from developers.pinterest.com.
+# The actual access/refresh tokens are read from environment variables
+# (PINTEREST_TOKEN, PINTEREST_REFRESH_TOKEN) — see the accounts section.
 pinterest:
+  # App ID from developers.pinterest.com (string)
   client_id: ""
+  # App Secret from developers.pinterest.com (string)
   client_secret: ""
+  # Must match the redirect URI registered in your Pinterest app settings
   redirect_uri: "http://localhost:8000/callback"
 
+# ──────────────────────────────────────────────────────────────────
 # Publishing Schedule
+# ──────────────────────────────────────────────────────────────────
+# Controls WHEN and HOW MANY pins are published each day.
+# The scheduler reads this section at startup.
 publishing:
+  # Total pins to publish per day across all windows.
+  # Pinterest rate limits apply — 10/day is safe for standard access.
+  # Trial access: max 1–3/day.
   pins_per_day: 10
+
+  # Time windows during the day when pins are published.
+  # Pins are evenly distributed across windows.
+  # Example: 10 pins / 3 windows ≈ 3–4 pins per window.
   publish_windows:
     - hour: 9
       minute: 0
@@ -22,74 +49,162 @@ publishing:
     - hour: 20
       minute: 0
       label: "evening"
+
+  # Minimum time between individual pin publications (minutes).
+  # Prevents burst-firing pins that could trigger rate limits.
   minimum_interval_minutes: 30
+
+  # Timezone for all scheduling. Use IANA timezone names.
+  # Common values: "UTC", "US/Eastern", "Europe/London"
   timezone: "UTC"
 
+# ──────────────────────────────────────────────────────────────────
 # Image Generation
+# ──────────────────────────────────────────────────────────────────
+# Controls image output size, quality, and which provider to use.
 generator:
+  # Primary image generation backend.
+  # Options: "local_diffusers" (local GPU), "huggingface" (HF Inference API)
+  # Auto-priority chain: local diffusers → huggingface fallback
   primary_provider: "local_diffusers"
+
+  # Fallback when primary_provider is unavailable.
+  # Set to "huggingface" if you don't have a local GPU.
   fallback_provider: "huggingface"
+
+  # Where processed (ready-to-publish) images are saved.
+  # Relative to the project root. Created automatically if it doesn't exist.
   output_directory: "storage/images/processed"
+
+  # Pinterest-optimized dimensions (1000×1500 = 2:3 ratio).
+  # This is the recommended aspect ratio for Pinterest pins.
   target_width: 1000
   target_height: 1500
+
+  # JPEG/PNG quality (1–100). 90 balances file size and quality.
   image_quality: 90
 
+# ──────────────────────────────────────────────────────────────────
 # Retry & Backoff
+# ──────────────────────────────────────────────────────────────────
+# How many times to retry failed operations and the delay between retries.
 retry:
+  # Max retries for image generation (per prompt).
   max_generation_retries: 3
+  # Max retries for publishing (per image).
   max_publish_retries: 3
+  # Use exponential backoff (true) or fixed delay (false).
   exponential_backoff: true
+  # Base delay in seconds before the first retry.
+  # Actual delay = base * (2 ^ retry_number) when exponential_backoff is true.
   base_delay_seconds: 1.0
 
+# ──────────────────────────────────────────────────────────────────
 # Board Mappings
+# ──────────────────────────────────────────────────────────────────
+# Maps internal niche keys to Pinterest board names.
+# The board names MUST match your Pinterest board names exactly.
+# Only boards defined here can be published to.
 boards:
+  # old_money is the only active niche in V1 production.
+  # The board "Old Money Women" must exist on your Pinterest account.
   old_money: "Old Money Women"
-  coquette: "Coquette Aesthetic"
-  pilates: "Pilates Girl"
-  lingerie_aesthetic: "Lingerie Aesthetic"
+  # Add more boards here as you add niches:
+  # coquette: "Coquette Aesthetic"
+  # pilates: "Pilates Girl"
+  # lingerie_aesthetic: "Lingerie Aesthetic"
 
+# ──────────────────────────────────────────────────────────────────
 # Logging
+# ──────────────────────────────────────────────────────────────────
 logging:
+  # Log level: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  # Use DEBUG for troubleshooting, INFO for normal operation.
   level: "INFO"
+
+  # Log file path. Set to null to log to stdout only.
+  # Example: "storage/logs/agent.log"
   file: null
-  max_bytes: 10485760
+
+  # Max size of a single log file before rotation (bytes).
+  max_bytes: 10485760  # 10 MB
+
+  # Number of rotated log files to keep.
   backup_count: 5
+
+  # Enable log rotation (true) or append indefinitely (false).
   rotation: true
+
+  # Python log format string.
   format_string: "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
 
+# ──────────────────────────────────────────────────────────────────
 # Database
+# ──────────────────────────────────────────────────────────────────
+# SQLite database path. Relative to the project root.
+# Auto-created on first interaction if it doesn't exist.
 db_path: "data/pinterest_agent.db"
 
+# ──────────────────────────────────────────────────────────────────
 # Accounts
+# ──────────────────────────────────────────────────────────────────
+# Each account represents a Pinterest account you publish to.
+# Multiple accounts can be defined but V1 only uses one ("main").
 accounts:
+  # The "main" account — the default for all CLI commands.
   - name: "main"
+    # Environment variable names that hold the Pinterest tokens.
+    # The loader reads these at runtime — never put actual tokens here.
     token_ref: "PINTEREST_TOKEN"
     refresh_token_ref: "PINTEREST_REFRESH_TOKEN"
+
+    # Override the global pins_per_day for this account.
+    # null means use the global publishing.pins_per_day value.
     pins_per_day: 10
+
+    # Which niches this account publishes to.
+    # Only "old_money" is active in V1 production.
     niches:
       - old_money
-      - coquette
-      - pilates
-      - lingerie_aesthetic
+      # - coquette       # Add when ready for multi-niche
+      # - pilates
+      # - lingerie_aesthetic
+
+    # Maps niche keys to Pinterest board names for this account.
+    # This overrides the global boards section per account.
+    board_mapping:
+      old_money: "Old Money Women"
+
+    # Which generation backends this account can use.
+    # Order determines priority: first available is used first.
     enabled_backends:
       - local_diffusers
       - huggingface
 
+# ──────────────────────────────────────────────────────────────────
 # Niches
+# ──────────────────────────────────────────────────────────────────
+# Defines the aesthetic niches the agent knows about.
+# Each niche must have a corresponding YAML template file.
 niches:
+  # Old Money Women — timeless luxury, neutral tones, refined elegance.
   old_money:
     name: "Old Money Women"
+    # Pinterest board name for this niche.
     board_name: "Old Money Women"
+    # Directory containing the prompt template YAML file.
+    # Default: src/pinterest_agent/prompts/templates/
     template_dir: "prompts/templates"
-  coquette:
-    name: "Coquette Aesthetic"
-    board_name: "Coquette Aesthetic"
-    template_dir: "prompts/templates"
-  pilates:
-    name: "Pilates Girl"
-    board_name: "Pilates Girl"
-    template_dir: "prompts/templates"
-  lingerie_aesthetic:
-    name: "Lingerie Aesthetic"
-    board_name: "Lingerie Aesthetic"
-    template_dir: "prompts/templates"
+  # Add more niches here as you expand:
+  # coquette:
+  #   name: "Coquette Aesthetic"
+  #   board_name: "Coquette Aesthetic"
+  #   template_dir: "prompts/templates"
+  # pilates:
+  #   name: "Pilates Girl"
+  #   board_name: "Pilates Girl"
+  #   template_dir: "prompts/templates"
+  # lingerie_aesthetic:
+  #   name: "Lingerie Aesthetic"
+  #   board_name: "Lingerie Aesthetic"
+  #   template_dir: "prompts/templates"
