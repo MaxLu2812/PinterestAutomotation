@@ -2,7 +2,7 @@
 
 Commands
 --------
-generate-prompts    Generate prompt batches from YAML templates.
+generate-prompts    Generate prompt batches from YAML templates or SceneComposer.
 list-prompts        Query prompts by status and/or niche.
 retry-prompts       Reset failed prompts to pending for retry.
 generate-images     Generate images from queued prompts.
@@ -21,7 +21,7 @@ from pinterest_agent.cli.main import cli
 from pinterest_agent.db.connection import ConnectionManager
 from pinterest_agent.db.repositories.image_repo import SqliteImageRepository
 from pinterest_agent.db.repositories.prompt_repo import SqlitePromptRepository
-from pinterest_agent.domain.models import ImageStatus, PromptStatus
+from pinterest_agent.domain.models import ImageStatus, Prompt, PromptStatus
 from pinterest_agent.generators.factory import GeneratorFactory
 from pinterest_agent.prompts.engine import PromptEngine
 
@@ -53,13 +53,39 @@ def _build_engine(db_path: str) -> PromptEngine:
 @click.option("--count", default=10, type=int, help="Number of prompts to generate.")
 @click.option("--seed", default=1, type=int, help="Starting seed for variable selection.")
 @click.option(
+    "--composer",
+    default=None,
+    type=click.Choice(["scene"], case_sensitive=False),
+    help="Use SceneComposer engine instead of flat templates.",
+)
+@click.option(
+    "--archetype",
+    default=None,
+    help="Archetype for SceneComposer (e.g. 'old_money_student'). Random if omitted.",
+)
+@click.option(
     "--db",
     default="data/pinterest_agent.db",
     show_default=True,
     help="Path to SQLite database.",
 )
-def generate_prompts(niche: str, count: int, seed: int, db: str) -> None:
-    """Generate prompts from YAML templates and enqueue them."""
+def generate_prompts(
+    niche: str,
+    count: int,
+    seed: int,
+    composer: str | None,
+    archetype: str | None,
+    db: str,
+) -> None:
+    """Generate prompts from YAML templates and enqueue them.
+
+    By default uses the flat-template PromptEngine.  Pass ``--composer scene``
+    to use the procedural SceneComposer with constraint-driven generation.
+    """
+    if composer == "scene":
+        _generate_with_composer(niche, archetype, count, seed, db)
+        return
+
     engine = _build_engine(db)
 
     if niche is None:
@@ -78,6 +104,66 @@ def generate_prompts(niche: str, count: int, seed: int, db: str) -> None:
     click.echo(f"Generating {count} prompt(s) for niche '{niche}' (seed={seed}) ...")
     results = engine.generate_batch(niche, count=count, start_seed=seed)
     click.echo(f"Done. Generated {len(results)} prompt(s).")
+
+
+def _generate_with_composer(
+    niche: str | None,
+    archetype: str | None,
+    count: int,
+    seed: int,
+    db: str,
+) -> None:
+    """Generate prompts using SceneComposer and store them in the DB."""
+    from pinterest_agent.scenes.composer import SceneComposer
+
+    composer_engine = SceneComposer()
+
+    if niche is None:
+        niches = composer_engine.list_niches()
+        if niches:
+            click.echo("Available scene niches:\n")
+            for n in niches:
+                archetypes = composer_engine.list_archetypes(n)
+                click.echo(f"  - {n} ({', '.join(archetypes)})")
+            click.echo(
+                "\nUse --niche to generate scenes for a specific niche."
+            )
+        else:
+            click.echo("No scene definitions found.")
+        return
+
+    # Build DB connection for storing prompts
+    cm = ConnectionManager(db)
+    cm.connect()
+    repo = SqlitePromptRepository(cm)
+
+    click.echo(
+        f"Generating {count} scene(s) for niche '{niche}' "
+        f"(archetype={archetype or 'random'}, seed={seed}) ..."
+    )
+
+    stored_count = 0
+    for offset in range(count):
+        current_seed = seed + offset
+        scene = composer_engine.generate(niche, archetype=archetype, seed=current_seed)
+
+        prompt = Prompt(
+            aesthetic=niche,
+            template_id=f"scene:{niche}/{scene.archetype}",
+            variables={
+                "archetype": scene.archetype,
+                "seed": current_seed,
+                "components": scene.components,
+                "negative_prompt": scene.negative_prompt,
+            },
+            variable_seed=current_seed,
+            text=scene.prompt,
+            status=PromptStatus.GENERATED,
+        )
+        prompt.id = repo.enqueue(prompt)
+        stored_count += 1
+
+    click.echo(f"Done. Generated and stored {stored_count} scene prompt(s).")
 
 
 # ------------------------------------------------------------------

@@ -1,0 +1,163 @@
+niche: pilates
+description: "Athletic elegance, sculpted movement, studio chic — active lifestyle aesthetic"
+
+archetypes:
+  pilates_instructor:
+    description: "Professional pilates instructor, precise and sculpted"
+    biases:
+      outfit:
+        "high-waist leggings and cropped tank": 35
+        "scoop-neck leotard with sheer tights": 35
+        "ribbed seamless sports set": 30
+      background:
+        "sunlit pilates studio with reformers": 40
+        "wooden floor studio with wall mirrors": 30
+        "bright white studio with potted plants": 30
+      pose:
+        "holding a standing leg stretch": 35
+        "mid-pilates roll-up on the mat": 35
+        "balanced on one leg at the reformer": 30
+      accessories:
+        "a pilates resistance ring": 40
+        "a resistance band set": 35
+        "a cork yoga mat": 25
+
+  fitness_enthusiast:
+    description: "Dedicated fitness lover, strong and graceful"
+    biases:
+      outfit:
+        "strappy sports bra and biker shorts": 40
+        "form-fitting sculpt bodysuit": 35
+        "high-waist leggings and cropped tank": 25
+      background:
+        "bright naturally lit workout studio": 35
+        "minimalist home gym with natural light": 35
+        "sunlit pilates studio with reformers": 30
+      pose:
+        "side-lying leg series on the mat": 35
+        "graceful mat stretch sequence": 35
+        "mid-pilates roll-up on the mat": 30
+      accessories:
+        "a stainless steel water bottle": 40
+        "a cork yoga mat": 30
+        "a cotton gym towel": 30
+
+  yoga_lover:
+    description: "Mindful movement, serenity, flexibility"
+    biases:
+      outfit:
+        "form-fitting sculpt bodysuit": 35
+        "ribbed seamless sports set": 35
+        "strappy sports bra and biker shorts": 30
+      background:
+        "calm minimalist home gym with plants": 35
+        "bright naturally lit workout studio": 35
+        "wooden floor studio with wall mirrors": 30
+      pose:
+        "graceful mat stretch sequence": 40
+        "holding a standing leg stretch": 35
+        "balanced on one leg at the reformer": 25
+      accessories:
+        "a cork yoga mat": 50
+        "a meditation bolster pillow": 30
+        "a stainless steel water bottle": 20
+
+components:
+  subject:
+    options:
+      - { value: "woman", weight: 70 }
+      - { value: "athlete", weight: 20 }
+      - { value: "fit woman", weight: 10 }
+
+  ethnicity:
+    options:
+      - { value: "with blonde hair", weight: 25 }
+      - { value: "with brunette hair", weight: 25 }
+      - { value: "with dark brown hair", weight: 20 }
+      - { value: "with auburn hair", weight: 15 }
+      - { value: "with black hair", weight: 15 }
+
+  hair:
+    options:
+      - { value: "in a sleek high ponytail", weight: 30 }
+      - { value: "in a secure ballet bun", weight: 25 }
+      - { value: "worn naturally down", weight: 15 }
+      - { value: "in french braids", weight: 15 }
+      - { value: "in a clean high ponytail", weight: 15 }
+
+  outfit:
+    options:
+      - { value: "high-waist leggings and cropped tank", weight: 25 }
+      - { value: "form-fitting sculpt bodysuit", weight: 25 }
+      - { value: "strappy sports bra and biker shorts", weight: 20 }
+      - { value: "ribbed seamless sports set", weight: 15 }
+      - { value: "scoop-neck leotard with sheer tights", weight: 10 }
+      - { value: "workout crop top and high-waist shorts", weight: 5 }
+
+  pose:
+    options:
+      - { value: "holding a standing leg stretch", weight: 20 }
+      - { value: "mid-pilates roll-up on the mat", weight: 20 }
+      - { value: "balanced on one leg at the reformer", weight: 15 }
+      - { value: "side-lying leg series on the mat", weight: 15 }
+      - { value: "graceful mat stretch sequence", weight: 15 }
+      - { value: "standing in a warrior pose", weight: 10 }
+      - { value: "seated forward fold stretch", weight: 5 }
+
+  background:
+    constraints:
+      - if: { outfit_contains: ["leggings", "shorts", "tights"] }
+        then: { only: ["studio", "gym", "reformer", "mirrors"] }
+    options:
+      - { value: "sunlit pilates studio with reformers", weight: 30 }
+      - { value: "wooden floor studio with wall mirrors", weight: 25 }
+      - { value: "calm minimalist home gym with plants", weight: 20 }
+      - { value: "bright white studio with potted plants", weight: 15 }
+      - { value: "outdoor wooden yoga deck", weight: 10 }
+
+  lighting:
+    options:
+      - { value: "bright natural studio", weight: 30 }
+      - { value: "golden hour outdoor", weight: 20 }
+      - { value: "soft diffused indoor", weight: 20 }
+      - { value: "morning sunlight streaming", weight: 20 }
+      - { value: "dramatic side lighting", weight: 10 }
+
+  camera:
+    options:
+      - { value: "50mm lens", weight: 30 }
+      - { value: "35mm lens", weight: 25 }
+      - { value: "85mm lens", weight: 25 }
+      - { value: "wide angle lens", weight: 20 }
+
+  mood:
+    options:
+      - { value: "effortless strength", weight: 30 }
+      - { value: "graceful discipline", weight: 25 }
+      - { value: "athletic elegance", weight: 20 }
+      - { value: "focused determination", weight: 15 }
+      - { value: "serene power", weight: 10 }
+
+  accessories:
+    options:
+      - { value: "a cork yoga mat", weight: 25 }
+      - { value: "a stainless steel water bottle", weight: 25 }
+      - { value: "a pilates resistance ring", weight: 20 }
+      - { value: "a set of resistance bands", weight: 15 }
+      - { value: "a cotton gym towel", weight: 10 }
+      - { value: "a canvas gym bag", weight: 5 }
+
+  style:
+    options:
+      - { value: "clean athletic photography", weight: 35 }
+      - { value: "active lifestyle editorial", weight: 25 }
+      - { value: "sculpted silhouette fitness", weight: 20 }
+      - { value: "natural movement documentary", weight: 20 }
+
+  composition:
+    options:
+      - { value: "full body shot", weight: 30 }
+      - { value: "three-quarter length", weight: 25 }
+      - { value: "dynamic action shot", weight: 20 }
+      - { value: "environmental portrait", weight: 15 }
+      - { value: "detail shot of muscle definition", weight: 10 }

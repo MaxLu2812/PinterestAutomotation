@@ -1,0 +1,193 @@
+niche: old_money
+description: "Timeless luxury, neutral tones, refined elegance"
+
+archetypes:
+  old_money_student:
+    description: "Young Ivy-league aesthetic"
+    biases:
+      outfit:
+        "linen blouse and tailored trousers": 40
+        "tweed jacket with turtleneck": 30
+        "cream cashmere sweater": 30
+      background:
+        "grand library with tall windows": 50
+        "garden path with classical statues": 30
+        "luxury cafe with natural light": 20
+      pose:
+        "reading a book": 40
+        "walking confidently": 30
+        "seated with crossed legs": 30
+      accessories:
+        "a leather-bound journal": 50
+        "a classic watch": 40
+        "gold hoop earrings": 10
+    # biases for other components fall back to base weights
+
+  old_money_businesswoman:
+    description: "Powerful, elegant executive"
+    biases:
+      subject:
+        "woman": 90
+      outfit:
+        "navy silk blouse with tailored trousers": 35
+        "cream cashmere sweater": 35
+        "beige trench coat": 30
+      background:
+        "elegant marble hallway": 30
+        "rooftop terrace overlooking the city": 25
+        "luxury cafe with natural light": 25
+        "minimalist modern mansion interior": 20
+      pose:
+        "gazing at the camera": 35
+        "walking confidently": 35
+        "seated with crossed legs": 30
+      accessories:
+        "a classic watch": 40
+        "a structured leather handbag": 35
+        "a silk scarf": 25
+
+  old_money_traveler:
+    description: "Jet-set luxury traveler"
+    biases:
+      outfit:
+        "beige trench coat": 40
+        "linen blazer and matching trousers": 30
+        "cream cashmere sweater": 30
+      background:
+        "rooftop terrace overlooking the city": 30
+        "elegant marble hallway": 25
+        "luxury cafe with natural light": 25
+        "garden path with classical statues": 20
+      pose:
+        "walking confidently": 40
+        "looking out a window": 30
+        "leaning against a doorframe": 30
+      accessories:
+        "a structured leather handbag": 40
+        "a silk scarf": 30
+        "gold hoop earrings": 30
+
+  old_money_reader:
+    description: "Introspective, cultured, literary"
+    biases:
+      outfit:
+        "cream cashmere sweater": 40
+        "linen blouse and tailored trousers": 35
+        "tweed jacket with turtleneck": 25
+      background:
+        "grand library with tall windows": 40
+        "luxury cafe with natural light": 25
+        "garden path with classical statues": 20
+        "cozy reading nook with fireplace": 15
+      pose:
+        "reading a book": 50
+        "looking out a window": 30
+        "holding a coffee cup": 20
+      accessories:
+        "a leather-bound journal": 60
+        "a classic watch": 30
+        "a silk scarf": 10
+
+components:
+  subject:
+    options:
+      - { value: "woman", weight: 80 }
+      - { value: "man", weight: 15 }
+      - { value: "couple", weight: 5 }
+
+  ethnicity:
+    options:
+      - { value: "with dark brown hair", weight: 30 }
+      - { value: "with chestnut hair", weight: 25 }
+      - { value: "with blonde hair", weight: 20 }
+      - { value: "with silver hair", weight: 10 }
+      - { value: "with auburn hair", weight: 15 }
+
+  hair:
+    options:
+      - { value: "styled in a sleek blowout", weight: 30 }
+      - { value: "in soft waves", weight: 25 }
+      - { value: "in an elegant updo", weight: 20 }
+      - { value: "worn naturally straight", weight: 15 }
+      - { value: "in a low chignon", weight: 10 }
+
+  outfit:
+    options:
+      - { value: "cream cashmere sweater", weight: 25 }
+      - { value: "navy silk blouse with tailored trousers", weight: 25 }
+      - { value: "beige trench coat", weight: 20 }
+      - { value: "linen blazer and matching trousers", weight: 15 }
+      - { value: "cream silk dress", weight: 10 }
+      - { value: "tweed jacket with turtleneck", weight: 5 }
+
+  pose:
+    options:
+      - { value: "reading a book", weight: 20 }
+      - { value: "walking confidently", weight: 20 }
+      - { value: "gazing at the camera", weight: 15 }
+      - { value: "looking out a window", weight: 15 }
+      - { value: "seated with crossed legs", weight: 10 }
+      - { value: "holding a coffee cup", weight: 10 }
+      - { value: "adjusting a blazer", weight: 5 }
+      - { value: "leaning against a doorframe", weight: 5 }
+
+  background:
+    constraints:
+      - if: { outfit_contains: "swimwear" }
+        then: { only: ["beach", "pool_deck", "boardwalk"] }
+      - if: { outfit_contains: ["cashmere", "blazer", "tweed", "blouse"] }
+        then: { only: ["cafe", "library", "mansion", "hallway", "rooftop", "garden"] }
+    options:
+      - { value: "luxury cafe with natural light", weight: 25 }
+      - { value: "grand library with tall windows", weight: 20 }
+      - { value: "minimalist modern mansion interior", weight: 20 }
+      - { value: "elegant marble hallway", weight: 15 }
+      - { value: "rooftop terrace overlooking the city", weight: 10 }
+      - { value: "garden path with classical statues", weight: 10 }
+
+  lighting:
+    options:
+      - { value: "golden hour", weight: 30 }
+      - { value: "soft natural window", weight: 25 }
+      - { value: "candlelit warm", weight: 20 }
+      - { value: "overcast diffused", weight: 15 }
+      - { value: "dramatic chiaroscuro", weight: 10 }
+
+  camera:
+    options:
+      - { value: "85mm lens", weight: 35 }
+      - { value: "50mm lens", weight: 25 }
+      - { value: "35mm lens", weight: 20 }
+      - { value: "medium format", weight: 20 }
+
+  mood:
+    options:
+      - { value: "effortless sophistication", weight: 30 }
+      - { value: "quiet luxury", weight: 25 }
+      - { value: "timeless grace", weight: 20 }
+      - { value: "refined confidence", weight: 15 }
+      - { value: "contemplative elegance", weight: 10 }
+
+  accessories:
+    options:
+      - { value: "a classic watch", weight: 25 }
+      - { value: "a structured leather handbag", weight: 25 }
+      - { value: "gold hoop earrings", weight: 20 }
+      - { value: "a silk scarf", weight: 15 }
+      - { value: "a leather-bound journal", weight: 10 }
+      - { value: "a pearl necklace", weight: 5 }
+
+  style:
+    options:
+      - { value: "editorial fashion photography", weight: 35 }
+      - { value: "timeless portraiture", weight: 25 }
+      - { value: "candid lifestyle", weight: 20 }
+      - { value: "vintage film aesthetic", weight: 20 }
+
+  composition:
+    options:
+      - { value: "portrait orientation", weight: 30 }
+      - { value: "full body shot", weight: 25 }
+      - { value: "three-quarter length", weight: 20 }
+      - { value: "environmental portrait", weight: 15 }
+      - { value: "detail shot", weight: 10 }

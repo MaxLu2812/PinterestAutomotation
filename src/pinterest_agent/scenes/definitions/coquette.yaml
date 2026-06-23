@@ -1,0 +1,165 @@
+niche: coquette
+description: "Soft feminine, romantic, bows, lace, pastels — delicate dreamy aesthetic"
+
+archetypes:
+  coquette_student:
+    description: "Young feminine college aesthetic with bows and pastels"
+    biases:
+      outfit:
+        "lace-trimmed babydoll dress": 40
+        "satin camisole with bow detail": 35
+        "ribbon corset top with skirt": 25
+      background:
+        "rose garden with blooming flowers": 40
+        "cozy feminine bedroom with fairy lights": 30
+        "vanity table with ornate mirror": 30
+      pose:
+        "playing with her hair": 35
+        "gently looking to the side": 35
+        "holding a flower": 30
+      accessories:
+        "a satin hair bow": 50
+        "pearl drop earrings": 30
+        "lace fingerless gloves": 20
+
+  romantic:
+    description: "Dreamy romantic, soft lighting, vintage florals"
+    biases:
+      outfit:
+        "floral babydoll dress": 40
+        "satin camisole with bow detail": 30
+        "lace-trimmed babydoll dress": 30
+      background:
+        "rose garden with blooming flowers": 40
+        "frilly bed draped in tulle": 35
+        "cozy feminine bedroom with fairy lights": 25
+      pose:
+        "holding a flower": 40
+        "gently looking to the side": 35
+        "twirling softly": 25
+      accessories:
+        "a vintage rose ring": 40
+        "pearl drop earrings": 35
+        "a satin hair bow": 25
+
+  soft_girl:
+    description: "Cozy, warm, gentle feminine energy"
+    biases:
+      outfit:
+        "chunky knit cardigan and mini skirt": 40
+        "cozy sweater dress": 35
+        "linen babydoll dress": 25
+      background:
+        "cozy feminine bedroom with fairy lights": 35
+        "cafe window with lace curtains": 30
+        "rose garden with blooming flowers": 35
+      pose:
+        "reading a worn paperback": 35
+        "sipping tea from a porcelain cup": 35
+        "gently looking to the side": 30
+      accessories:
+        "a worn paperback book": 40
+        "a porcelain tea cup": 35
+        "a satin hair bow": 25
+
+components:
+  subject:
+    options:
+      - { value: "woman", weight: 50 }
+      - { value: "girl", weight: 40 }
+      - { value: "young woman", weight: 10 }
+
+  ethnicity:
+    options:
+      - { value: "with soft blonde hair", weight: 30 }
+      - { value: "with light brown hair", weight: 25 }
+      - { value: "with rosy brown hair", weight: 20 }
+      - { value: "with pastel pink hair", weight: 10 }
+      - { value: "with chestnut hair", weight: 15 }
+
+  hair:
+    options:
+      - { value: "styled in soft waves", weight: 30 }
+      - { value: "in loose curled ringlets", weight: 25 }
+      - { value: "in a high ponytail with ribbon", weight: 20 }
+      - { value: "worn naturally flowing", weight: 15 }
+      - { value: "in a half-up style with bow", weight: 10 }
+
+  outfit:
+    options:
+      - { value: "lace-trimmed babydoll dress", weight: 25 }
+      - { value: "satin camisole with bow detail", weight: 25 }
+      - { value: "chunky knit cardigan and mini skirt", weight: 15 }
+      - { value: "ribbon corset top with skirt", weight: 15 }
+      - { value: "floral babydoll dress", weight: 10 }
+      - { value: "cozy sweater dress", weight: 10 }
+
+  pose:
+    options:
+      - { value: "gently looking to the side", weight: 20 }
+      - { value: "playing with her hair", weight: 20 }
+      - { value: "holding a flower", weight: 15 }
+      - { value: "twirling softly", weight: 10 }
+      - { value: "reading a worn paperback", weight: 10 }
+      - { value: "sipping tea from a porcelain cup", weight: 10 }
+      - { value: "gazing into a vanity mirror", weight: 5 }
+      - { value: "adjusting a satin ribbon", weight: 10 }
+
+  background:
+    constraints:
+      - if: { outfit_contains: "babydoll" }
+        then: { only: ["bedroom", "garden", "vanity", "cafe", "gazebo", "bed"] }
+    options:
+      - { value: "frilly bed draped in tulle", weight: 25 }
+      - { value: "rose garden with blooming flowers", weight: 25 }
+      - { value: "cozy feminine bedroom with fairy lights", weight: 20 }
+      - { value: "vanity table with ornate mirror", weight: 15 }
+      - { value: "cafe window with lace curtains", weight: 10 }
+      - { value: "garden gazebo covered in vines", weight: 5 }
+
+  lighting:
+    options:
+      - { value: "soft diffused indoor", weight: 30 }
+      - { value: "golden hour bedroom", weight: 25 }
+      - { value: "candlelit warm glow", weight: 20 }
+      - { value: "dreamy garden sunbeam", weight: 15 }
+      - { value: "pink neon tinted", weight: 10 }
+
+  camera:
+    options:
+      - { value: "50mm lens", weight: 30 }
+      - { value: "35mm lens", weight: 25 }
+      - { value: "85mm lens", weight: 25 }
+      - { value: "vintage film camera", weight: 20 }
+
+  mood:
+    options:
+      - { value: "romantic nostalgia", weight: 30 }
+      - { value: "tender femininity", weight: 25 }
+      - { value: "whimsical elegance", weight: 20 }
+      - { value: "dreamy romance", weight: 15 }
+      - { value: "sweet innocence", weight: 10 }
+
+  accessories:
+    options:
+      - { value: "a satin hair bow", weight: 30 }
+      - { value: "pearl drop earrings", weight: 20 }
+      - { value: "lace fingerless gloves", weight: 15 }
+      - { value: "a vintage rose ring", weight: 15 }
+      - { value: "a porcelain tea cup", weight: 10 }
+      - { value: "a worn paperback book", weight: 10 }
+
+  style:
+    options:
+      - { value: "romantic soft girl photography", weight: 35 }
+      - { value: "light and airy aesthetic", weight: 25 }
+      - { value: "delicate feminine editorial", weight: 20 }
+      - { value: "vintage film aesthetic", weight: 20 }
+
+  composition:
+    options:
+      - { value: "portrait orientation", weight: 30 }
+      - { value: "close-up shot", weight: 25 }
+      - { value: "three-quarter length", weight: 20 }
+      - { value: "environmental portrait", weight: 15 }
+      - { value: "detail shot of hands and accessories", weight: 10 }

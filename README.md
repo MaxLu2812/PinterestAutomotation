@@ -6,18 +6,64 @@ Generates AI prompts → creates images → publishes pins.
 ## Architecture
 
 ```
-Prompt Engine (GPT-4o-mini)
-       ↓
-  Prompt Queue (SQLite)
-       ↓
-Image Generation (local/cloud)
-       ↓
-  Image Store (FS + SQLite)
-       ↓
-Pin Publisher (Pinterest API v5)
-       ↓
-  Scheduler (APScheduler)
+Prompt Sources ─┬── GPT-4o-mini (LLM)
+                │
+                └── SceneComposer V1 (procedural) ◄── 2.38B combinations
+                        │
+                   Prompt Queue (SQLite)
+                        ↓
+               Image Generation (local/cloud)
+                        ↓
+                  Image Store (FS + SQLite)
+                        ↓
+               Pin Publisher (Pinterest API v5)
+                        ↓
+                  Scheduler (APScheduler)
 ```
+
+### SceneComposer V1 — Procedural Prompt Engine
+
+Replaces LLM dependency with deterministic weighted-random scene generation.
+Generates 2.38 billion unique, coherent prompts across 3 niche definitions.
+
+| Component | Role |
+|-----------|------|
+| **WeightedSelector** | Deterministic pick via `random.Random(seed)` — same seed always produces same scene |
+| **BiasResolver** | Archetype-specific weight multipliers (× bias / 100); unlisted options get ×0.1 deprioritisation |
+| **ConstraintEngine** | Filters invalid outfit→background pairs; falls back to all options if constraint would empty the list |
+| **SceneRenderer** | Composes components into fluent English sentences with context-aware negative prompts |
+| **NegativePromptEngine** | Adds suggestive/nudity terms for swimwear/lingerie; adds overexposed window for indoor scenes |
+
+Key properties:
+- **Deterministic**: seed 42 always produces identical scene
+- **No LLM**: pure procedural generation, zero API cost
+- **Variety**: 2.38B unique combinations across 10 archetypes
+- **Safety**: constraint rules prevent impossible outfit/background pairs
+- **Quality**: validated across 1000-scene snapshot corpus (99.9% uniqueness, 0 malformed)
+
+Usage:
+
+```bash
+# List available scene niches
+pinterest-agent generate-prompts --composer scene
+
+# Generate 10 old_money scenes with random archetypes
+pinterest-agent generate-prompts --composer scene --niche old_money --count 10
+
+# Generate with specific archetype
+pinterest-agent generate-prompts --composer scene --niche old_money --archetype old_money_reader --count 5
+```
+
+Snapshot corpus metrics (1000 scenes):
+
+| Metric | Value |
+|--------|-------|
+| Uniqueness ratio | 99.90% |
+| Average length | 312 chars |
+| Archetypes seen | 10/10 |
+| Impossible combos | 0 |
+| Adjacent duplicates | 0 |
+| Repeated phrases | 0 |
 
 ## Quick Start
 
@@ -88,7 +134,7 @@ See `config.yaml` for all settings. Key sections:
 
 | Command             | Description                       |
 | ------------------- | --------------------------------- |
-| `generate-prompts`  | Generate AI prompts from templates|
+| `generate-prompts`  | Generate prompts (LLM or `--composer scene` with `--archetype`)|
 | `generate-images`   | Generate images from prompt queue |
 | `publish-pins`      | Publish images to Pinterest       |
 | `scheduler-run`     | Start scheduled publishing        |
