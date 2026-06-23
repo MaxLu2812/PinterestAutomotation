@@ -1,0 +1,12 @@
+niche: coquette
+description: "Coquette aesthetic — soft feminine, romantic, bows, lace, pastels"
+prompt_template: "Soft feminine {age} woman with {hair_color} hair, wearing {outfit} in {color}, {setting}, {pose}, {background}. Coquette aesthetic, {mood}, romantic soft girl style, light and airy photography, delicate feminine energy, rosy and cream tones"
+variables:
+  age: ["18-25", "20-30", "18-28"]
+  hair_color: ["blonde", "light brown", "rosy brown", "pastel pink"]
+  outfit: ["lace-trimmed babydoll dress", "satin camisole with bow", "chunky knit cardigan and mini skirt", "ribbon corset top", "floral babydoll"]
+  color: ["baby pink", "cream", "lavender", "powder blue", "rose"]
+  setting: ["soft diffused indoor", "dreamy garden", "golden hour bedroom"]
+  pose: ["gently looking aside", "playing with hair", "holding a flower"]
+  background: ["frilly bed with fairy lights", "rose garden", "cozy feminine bedroom", "vanity with mirrors"]
+  mood: ["romantic nostalgia", "tender femininity", "whimsical elegance"]

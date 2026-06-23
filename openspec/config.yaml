@@ -1,0 +1,68 @@
+# openspec/config.yaml
+schema: spec-driven
+
+context: |
+  Project: PinterestAutomotation
+  Stack: Not detected (empty project — no package.json, go.mod, pyproject.toml, or any code files)
+  Architecture: Not detected
+  Testing: No test runner detected (no package.json, go.mod, pyproject.toml, pytest.ini, Cargo.toml, Makefile, or CI config found)
+  Style: Not detected
+  Persistence mode: openspec
+
+testing:
+  strict_tdd: false
+  reason: >
+    No test runner detected in the project. The project is empty — no
+    package.json, go.mod, pyproject.toml, pytest.ini, Cargo.toml, or
+    Makefile. Strict TDD (RED-GREEN-REFACTOR) cannot be enforced without
+    a test runner. Once a test runner is configured, set strict_tdd: true.
+  detected: 2026-06-23
+  runner:
+    command: ""
+    framework: none
+  layers:
+    unit:
+      available: false
+      tool: ""
+    integration:
+      available: false
+      tool: ""
+    e2e:
+      available: false
+      tool: ""
+  coverage:
+    available: false
+    command: ""
+  quality:
+    linter:
+      available: false
+      command: ""
+    type_checker:
+      available: false
+      command: ""
+    formatter:
+      available: false
+      command: ""
+
+rules:
+  proposal:
+    - Include rollback plan for risky changes
+  specs:
+    - Use Given/When/Then for scenarios
+    - Use RFC 2119 keywords (MUST, SHALL, SHOULD, MAY)
+  design:
+    - Include sequence diagrams for complex flows
+    - Document architecture decisions with rationale
+  tasks:
+    - Group by phase, use hierarchical numbering
+    - Keep tasks completable in one session
+  apply:
+    - Follow existing code patterns
+    tdd: false
+    test_command: ""
+  verify:
+    test_command: ""
+    build_command: ""
+    coverage_threshold: 0
+  archive:
+    - Warn before merging destructive deltas

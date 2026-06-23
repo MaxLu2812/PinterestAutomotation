@@ -1,0 +1,12 @@
+niche: pilates
+description: "Pilates aesthetic — athletic elegance, sculpted movement, studio chic"
+prompt_template: "Fit {age} woman with {hair_color} hair, wearing {outfit} in {color}, {setting}, {pose}, {background}. Pilates aesthetic, {mood}, clean athletic energy, natural studio lighting, active lifestyle photography, sculpted silhouette"
+variables:
+  age: ["20-30", "25-35", "30-40"]
+  hair_color: ["blonde", "brunette", "dark brown", "auburn", "black"]
+  outfit: ["high-waist leggings and cropped tank", "form-fitting bodysuit", "strappy sports bra and biker shorts", "ribbed seamless set", "scoop-neck leotard"]
+  color: ["charcoal", "dusty rose", "sage green", "black", "cream", "heather grey"]
+  setting: ["bright natural-lit studio", "minimalist home gym", "sunlit reformer room"]
+  pose: ["holding a standing leg stretch", "mid-pilates roll-up", "balanced on one leg at reformer", "side-lying leg series", "graceful mat stretch"]
+  background: ["sunlit pilates studio with reformers", "wooden floor studio with mirrors", "calm minimalist home gym", "bright white studio with plants"]
+  mood: ["effortless strength", "graceful discipline", "athletic elegance"]

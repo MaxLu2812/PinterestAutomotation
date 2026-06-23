@@ -1,0 +1,95 @@
+# Pinterest Aesthetic Automation — Configuration
+# ==============================================
+# All sections have defaults. An empty/missing file works but some
+# features (publishing, generation) need tokens and provider config.
+
+# Pinterest Application Credentials
+pinterest:
+  client_id: ""
+  client_secret: ""
+  redirect_uri: "http://localhost:8000/callback"
+
+# Publishing Schedule
+publishing:
+  pins_per_day: 10
+  publish_windows:
+    - hour: 9
+      minute: 0
+      label: "morning"
+    - hour: 14
+      minute: 0
+      label: "afternoon"
+    - hour: 20
+      minute: 0
+      label: "evening"
+  minimum_interval_minutes: 30
+  timezone: "UTC"
+
+# Image Generation
+generator:
+  primary_provider: "local_diffusers"
+  fallback_provider: "huggingface"
+  output_directory: "storage/images/processed"
+  target_width: 1000
+  target_height: 1500
+  image_quality: 90
+
+# Retry & Backoff
+retry:
+  max_generation_retries: 3
+  max_publish_retries: 3
+  exponential_backoff: true
+  base_delay_seconds: 1.0
+
+# Board Mappings
+boards:
+  old_money: "Old Money Women"
+  coquette: "Coquette Aesthetic"
+  pilates: "Pilates Girl"
+  lingerie_aesthetic: "Lingerie Aesthetic"
+
+# Logging
+logging:
+  level: "INFO"
+  file: null
+  max_bytes: 10485760
+  backup_count: 5
+  rotation: true
+  format_string: "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+
+# Database
+db_path: "data/pinterest_agent.db"
+
+# Accounts
+accounts:
+  - name: "main"
+    token_ref: "PINTEREST_TOKEN"
+    refresh_token_ref: "PINTEREST_REFRESH_TOKEN"
+    pins_per_day: 10
+    niches:
+      - old_money
+      - coquette
+      - pilates
+      - lingerie_aesthetic
+    enabled_backends:
+      - local_diffusers
+      - huggingface
+
+# Niches
+niches:
+  old_money:
+    name: "Old Money Women"
+    board_name: "Old Money Women"
+    template_dir: "prompts/templates"
+  coquette:
+    name: "Coquette Aesthetic"
+    board_name: "Coquette Aesthetic"
+    template_dir: "prompts/templates"
+  pilates:
+    name: "Pilates Girl"
+    board_name: "Pilates Girl"
+    template_dir: "prompts/templates"
+  lingerie_aesthetic:
+    name: "Lingerie Aesthetic"
+    board_name: "Lingerie Aesthetic"
+    template_dir: "prompts/templates"

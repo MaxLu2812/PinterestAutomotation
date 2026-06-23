@@ -1,0 +1,12 @@
+niche: old_money
+description: "Old Money Women aesthetic — timeless luxury, neutral tones, refined elegance"
+prompt_template: "Elegant {age} woman with {hair_color} hair, wearing a {outfit} in {color}, {setting} lighting, {pose}, {background}. Old money aesthetic, {mood}, editorial fashion photography, timeless luxury editorial, neutral beige and cream tones, premium lifestyle"
+variables:
+  age: ["25-35", "35-50", "40-60"]
+  hair_color: ["dark brown", "chestnut", "blonde", "silver", "brunette"]
+  outfit: ["cashmere coat", "cream blazer", "linen blouse and tailored trousers", "silk dress", "trench coat", "tweed jacket"]
+  color: ["cream", "navy", "champagne", "taupe", "ivory", "charcoal"]
+  setting: ["soft natural window", "golden hour outdoor", "candlelit interior"]
+  pose: ["confident gaze at camera", "candid walking shot", "seated elegant profile"]
+  background: ["minimalist modern interior", "elegant marble hallway", "garden with soft greenery", "classic library"]
+  mood: ["effortless sophistication", "quiet luxury", "timeless grace"]

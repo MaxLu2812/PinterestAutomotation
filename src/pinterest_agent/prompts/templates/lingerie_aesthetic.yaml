@@ -1,0 +1,12 @@
+niche: lingerie_aesthetic
+description: "Lingerie aesthetic — SFW boudoir style, soft sensuality, intimate elegance, no nudity"
+prompt_template: "{age} woman with {hair_color} hair, wearing {outfit} in {color}, {setting}, {pose}, {background}. Boudoir aesthetic, {mood}, soft intimate editorial, tasteful elegance, satin and lace textures, warm moody tones, artistic feminine portraiture"
+variables:
+  age: ["22-30", "25-35", "28-40"]
+  hair_color: ["blonde", "brown", "chestnut", "black", "red"]
+  outfit: ["silk camisole and matching shorts", "lace-trimmed satin robe", "lace bralette and high-waist brief", "strappy bodysuit", "sheer mesh robe over matching set"]
+  color: ["dusty rose", "champagne", "blush", "charcoal", "ivory", "deep burgundy"]
+  setting: ["soft diffused bedroom", "golden hour window light", "warm candlelit corner"]
+  pose: ["reclining on bed", "looking over shoulder", "adjusting robe strap", "sitting at vanity", "leaning against doorway"]
+  background: ["luxurious bedroom with satin sheets", "ornate mirror and vanity setup", "sheer curtain window wall", "velvet chaise lounge", "plush rug with natural light"]
+  mood: ["soft sensuality", "intimate elegance", "tasteful allure"]
